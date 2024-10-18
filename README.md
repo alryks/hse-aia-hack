@@ -48,17 +48,35 @@ docker compose up
 `Poetry` является более продвинутым пакетным менеджером, чем `pip`. На с большей вероятность не возникнет ситуации, что нужные пакеты установятся неправильно.
 
 - Если запускаете на `CUDA`, то:
-  1. В `pyproject.toml` изменить следующую строку:
+  1. Проверить, установлен ли CUDA Toolkit: `nvcc -V`
+  2. В `pyproject.toml` изменить следующую строку:
 
   ```
   url = "https://download.pytorch.org/whl/cu124"
   ```
 
   На соответствующую версию `CUDA`.
-  2. Прописать переменную среды:
-     - Windows Powershell: `$env:CMAKE_ARGS="-DLLAMA_CUDA=on"`
-     - Windows Command Prompt: `set CMAKE_ARGS=-DLLAMA_CUDA=on`
+
+  3. Прописать переменныю среды:
+     - Windows Powershell:
+     ```
+     $env:CMAKE_GENERATOR = "MinGW Makefiles"
+     $env:CMAKE_ARGS="-DGGML_CUDA=on -DCMAKE_C_COMPILER=C:/msys64/mingw64/bin/gcc.exe -DCMAKE_CXX_COMPILER=C:/msys64/mingw64/bin/g++.exe"
+     ```
+     - Windows Command Prompt: 
+     ```
+     set CMAKE_GENERATOR = "MinGW Makefiles"
+     set CMAKE_ARGS="-DGGML_CUDA=on -DCMAKE_C_COMPILER=C:/msys64/mingw64/bin/gcc.exe -DCMAKE_CXX_COMPILER=C:/msys64/mingw64/bin/g++.exe"
+     ```
+     Установив пути до компиляторов `gcc` и `g++` на Windows.
      - Linux: `CMAKE_ARGS="-DGGML_CUDA=on"`
+  4. *Для Windows:*
+     1. Установить `Microsoft Visual Studio Developer Tools`
+     2. Добавить директорию, где располагается `cl.exe` в `Path`, например, такую:
+
+    ```
+    C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.28.29910\bin\Hostx64\x64
+    ```
 
 - Если запускаете на `Apple Metal`, то:
   1. Убрать:
@@ -71,11 +89,17 @@ docker compose up
   ```
 
   2. Изменить `torch = { version = "2.5.0", source="torch"}` на `torch = "2.5.0"`
+  3. Прописать переменную среды: `CMAKE_ARGS="-DGGML_METAL=on"`
 
-
+Устанавливаем зависимости:
 ```bash
 poetry lock
 poetry install
+```
+
+Запускаем:
+```
+poetry run python main.py
 ```
 
 ### Переменные окружения

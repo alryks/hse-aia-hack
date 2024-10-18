@@ -37,8 +37,8 @@ def generate_submit(test_solutions_path: str, predict_func: Callable, save_path:
 
     submit_df = pd.DataFrame(columns=["solution_id", "author_comment", "author_comment_embedding"])
     for i in bar:
-        idx = test_solutions.index[i]
         solution_row = test_solutions.iloc[i]
+        idx = int(solution_row["id"])
 
         text = predict_func(solution_row)  # here you can do absolute whatever you want
 
