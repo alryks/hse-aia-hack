@@ -10,11 +10,15 @@ python = "^3.11"
 requests = "^2.32.3"
 python-dotenv = "^1.0.1"
 pandas = "^2.2.3"
-scikit-learn = "^1.5.2"
-torch = "^2.4.1"
+torch = { version = "2.5.0", source="torch"}
 transformers = "^4.45.2"
 openpyxl = "^3.1.5"
-accelerate = "^1.0.1"
+llama-cpp-python = "^0.3"
+
+[[tool.poetry.source]]
+name = "torch"
+url = "https://download.pytorch.org/whl/cu124"
+secondary = true
 
 [tool.poetry.group.dev.dependencies]
 black = { extras = ["jupyter"], version = "^24.10.0" }

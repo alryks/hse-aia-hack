@@ -12,17 +12,12 @@ services:
       - "8000:8000"
     environment:
       - PYTHONUNBUFFERED=1
+      - NVIDIA_VISIBLE_DEVICES=all
     command: poetry run python main.py
-
-# TODO: uncomment code below if you want to run it on GPU
-#  environment:
-#    - NVIDIA_VISIBLE_DEVICES=all
-#  deploy:
-#    mode: replicated
-#    replicas: 1
-#    resources:
-#      reservations:
-#        devices:
-#          - driver: nvidia
-#            device_ids: [ '0' ]
-#            capabilities: [ gpu ]
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              device_ids: ['0']
+              capabilities: [gpu]
