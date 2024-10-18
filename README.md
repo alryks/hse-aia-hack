@@ -37,7 +37,7 @@
 
 ## Запуск
 
-### В контейнере (наконец-то добавлен!)
+### В контейнере (пока-что не получается)
 
 ```bash
 docker compose up
@@ -47,7 +47,34 @@ docker compose up
 
 `Poetry` является более продвинутым пакетным менеджером, чем `pip`. На с большей вероятность не возникнет ситуации, что нужные пакеты установятся неправильно.
 
+- Если запускаете на `CUDA`, то:
+  1. В `pyproject.toml` изменить следующую строку:
+
+  ```
+  url = "https://download.pytorch.org/whl/cu124"
+  ```
+
+  На соответствующую версию `CUDA`.
+  2. Прописать переменную среды:
+     - Windows Powershell: `$env:CMAKE_ARGS="-DLLAMA_CUDA=on"`
+     - Windows Command Prompt: `set CMAKE_ARGS=-DLLAMA_CUDA=on`
+     - Linux: `CMAKE_ARGS="-DGGML_CUDA=on"`
+
+- Если запускаете на `Apple Metal`, то:
+  1. Убрать:
+
+  ```
+  [[tool.poetry.source]]
+  name = "torch"
+  url = "https://download.pytorch.org/whl/cu124"
+  secondary = true
+  ```
+
+  2. Изменить `torch = { version = "2.5.0", source="torch"}` на `torch = "2.5.0"`
+
+
 ```bash
+poetry lock
 poetry install
 ```
 
